@@ -3,8 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome</title>
+    <script src="vendors/jquery.min.js" charset="utf-8"></script>
+    <script src="vendors/chart.min.js" charset="utf-8"></script>
 </head>
 <body>
 <h1>Welcome</h1>
+<canvas id="chartCanvas"></canvas>
+<script>
+    $.ajax({
+        url: "/api/tpi/",
+        data: {
+            from: new Date("2016-11-30 00:00").getTime(),
+            to: new Date().getTime()
+        }
+    }).then(results => {
+        const myLineChart = new Chart(document.getElementById("chartCanvas"), {
+            type: "line",
+            data: {
+                datasets: [
+                    {
+                        label: "TPI",
+                        data: results.map((result, i) => ({ x: i, y: result }))
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        type: "linear",
+                        position: "bottom"
+                    }]
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>
